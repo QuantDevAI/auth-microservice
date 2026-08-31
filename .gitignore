@@ -1,0 +1,70 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+*.iws
+*.ipr
+
+# Build
+target/
+out/
+.gradle/
+build/
+dist/
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+.m2/
+dependency-reduced-pom.xml
+
+# Gradle
+.gradle/
+gradle-app.setting
+gradlew
+gradlew.bat
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+log.txt
+
+# Runtime
+*.pid
+*.pid.lock
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Node (if needed for frontend)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+*.tmp
+.classpath
+.project
+.settings/
+*.class

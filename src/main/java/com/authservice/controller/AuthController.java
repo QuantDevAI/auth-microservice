@@ -2,13 +2,17 @@ package com.authservice.controller;
 
 import com.authservice.dto.LoginRequest;
 import com.authservice.dto.LoginResponse;
+import com.authservice.dto.ForgotPasswordRequest;
 import com.authservice.dto.RefreshRequest;
 import com.authservice.dto.RegisterRequest;
+import com.authservice.dto.ResetPasswordRequest;
 import com.authservice.dto.UserResponse;
+import com.authservice.dto.VerifyEmailRequest;
 import com.authservice.entity.RefreshToken;
 import com.authservice.entity.User;
 import com.authservice.security.JwtProvider;
 import com.authservice.service.RefreshTokenService;
+import com.authservice.service.AccountService;
 import com.authservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -30,6 +34,7 @@ public class AuthController {
     private final UserService userService;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final AccountService accountService;
 
     /**
      * Register a new user
@@ -41,6 +46,24 @@ public class AuthController {
         log.info("Received registration request for email: {}", request.getEmail());
         UserResponse response = userService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/verify-email")
+    public ResponseEntity<String> verifyEmail(@Valid @RequestBody VerifyEmailRequest request) {
+        accountService.verifyEmail(request.getToken());
+        return ResponseEntity.ok("Email verified successfully");
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        accountService.requestPasswordReset(request);
+        return ResponseEntity.ok("If the email exists, password reset instructions will be sent");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        accountService.resetPassword(request);
+        return ResponseEntity.ok("Password reset successfully");
     }
 
     /**

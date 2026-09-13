@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Base64;
 
 @Component
@@ -17,7 +18,7 @@ public class TokenHasher {
     public String hash(String token) {
         try {
             MessageDigest digest = MessageDigest.getInstance(ALGORITHM);
-            byte[] hash = digest.digest(token.getBytes());
+            byte[] hash = digest.digest(token.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(hash);
         } catch (NoSuchAlgorithmException e) {
             log.error("Failed to hash token using algorithm: {}", ALGORITHM, e);
@@ -26,6 +27,9 @@ public class TokenHasher {
     }
 
     public boolean verify(String token, String hash) {
-        return hash(token).equals(hash);
+        return MessageDigest.isEqual(
+            hash(token).getBytes(StandardCharsets.UTF_8),
+            hash.getBytes(StandardCharsets.UTF_8)
+        );
     }
 }

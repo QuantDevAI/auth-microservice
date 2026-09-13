@@ -33,6 +33,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
+    private final AccountService accountService;
 
     /**
      * Register a new user
@@ -77,6 +78,7 @@ public class UserService {
             .build();
 
         User savedUser = userRepository.save(user);
+        accountService.createEmailVerificationToken(savedUser);
         log.info("User registered successfully: {}", savedUser.getId());
 
         return mapToUserResponse(savedUser);
@@ -89,6 +91,10 @@ public class UserService {
      * @return User if credentials are valid
      * @throws InvalidCredentialsException if credentials are invalid
      */
+    public User login(LoginRequest request) {
+        return login(request, null);
+    }
+
     public User login(LoginRequest request, HttpServletRequest servletRequest) {
         log.debug("Processing login for email: {}", request.getEmail());
 

@@ -142,6 +142,9 @@ docker-compose logs -f auth-service
 - JWTs assinados com chave externa (não hardcoded)
 - Tokens não armazenados em texto puro
 - Refresh Tokens revogáveis e rotacionáveis
+- Tokens de verificação de email e recuperação de senha armazenados apenas como hash
+- Tokens de conta expiram e não podem ser reutilizados
+- Todas as sessões são revogadas após redefinição de senha
 - Rate limiting nos endpoints críticos (próximas fases)
 - Proteção contra CSRF/CORS
 - Logs estruturados sem dados sensíveis

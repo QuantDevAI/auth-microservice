@@ -221,17 +221,62 @@ Authorization: Bearer <accessToken>
 
 ---
 
+## Fase 6 ✅ - Conta
+
+### POST `/api/v1/auth/verify-email`
+**Confirmar o email do usuário**
+
+**Request:**
+```json
+{
+  "token": "token-enviado-por-email"
+}
+```
+
+O token é armazenado no banco somente como hash, possui validade configurável de 24 horas e não pode ser reutilizado. Quando válido, o usuário passa de `PENDING_VERIFICATION` para `ACTIVE`.
+
+### POST `/api/v1/auth/forgot-password`
+**Solicitar recuperação de senha**
+
+**Request:**
+```json
+{
+  "email": "joao@email.com"
+}
+```
+
+**Response (200 OK):**
+```text
+If the email exists, password reset instructions will be sent
+```
+
+O serviço mantém a mesma resposta quando o email não existe, evitando enumeração de usuários. O envio efetivo da mensagem de email deverá ser conectado posteriormente.
+
+### POST `/api/v1/auth/reset-password`
+**Definir uma nova senha**
+
+**Request:**
+```json
+{
+  "token": "token-enviado-por-email",
+  "newPassword": "NovaSenha123!"
+}
+```
+
+O token expira em 1 hora, só pode ser usado uma vez e a nova senha deve conter pelo menos 8 caracteres, uma letra maiúscula, uma minúscula, um número e um caractere especial. Após a troca, todas as sessões de refresh do usuário são revogadas.
+
+**Respostas de erro:**
+- `400 BAD_REQUEST` para senha fraca ou dados inválidos;
+- `401 UNAUTHORIZED` para token inexistente, expirado ou já utilizado.
+
+---
+
 ## Fases Próximas
 
 
 
 ### Fase 5 - Autorização
 - Endpoints com `@PreAuthorize("hasRole('ADMIN')")`
-
-### Fase 6 - Conta
-- `POST /api/v1/auth/verify-email` - Verificar email
-- `POST /api/v1/auth/forgot-password` - Recuperar senha
-- `POST /api/v1/auth/reset-password` - Resetar senha
 
 ### Fase 7 - Segurança
 - Rate limiting implementado

@@ -22,6 +22,10 @@ jwt:
   access-token-expiration: 900000
   refresh-token-expiration: 2592000000
 
+account:
+  email-verification-expiration: 86400000
+  password-reset-expiration: 3600000
+
 server:
   servlet:
     context-path: /

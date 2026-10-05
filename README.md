@@ -145,9 +145,20 @@ docker-compose logs -f auth-service
 - Tokens de verificação de email e recuperação de senha armazenados apenas como hash
 - Tokens de conta expiram e não podem ser reutilizados
 - Todas as sessões são revogadas após redefinição de senha
-- Rate limiting nos endpoints críticos (próximas fases)
+- Rate limiting nos endpoints críticos (planejado como evoluções futuras)
 - Proteção contra CSRF/CORS
 - Logs estruturados sem dados sensíveis
+
+## Fase 8 — Qualidade
+
+A implementação final inclui:
+
+- Cobertura de testes com JUnit + Spring Test
+- Documentação OpenAPI/Swagger em `/swagger-ui/index.html`
+- Endpoints de saúde em `/health` e `/actuator/health`
+- Docker e Docker Compose para PostgreSQL e aplicação
+- Configuração final de observabilidade e documentação
+- README com instruções para execução local e produção
 
 ## Configuração de Variáveis de Ambiente
 
@@ -181,6 +192,7 @@ mvn test jacoco:report
 
 ## Documentação
 
-- **API OpenAPI/Swagger**: Será disponível em `/swagger-ui.html` (Fase 8)
-- **Health Checks**: `/actuator/health`
+- **API OpenAPI/Swagger**: disponível em `/swagger-ui/index.html`
+- **Health Checks**: `/health` e `/actuator/health`
+- **Liveness / Readiness**: `/actuator/health/liveness` e `/actuator/health/readiness`
 - **Métricas**: `/actuator/metrics` (quando habilitadas)

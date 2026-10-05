@@ -35,6 +35,13 @@ server:
     include-stacktrace: never
     include-exception: false
 
+info:
+  app:
+    name: auth-service
+    version: 1.0.0
+    description: Authentication and authorization microservice
+    environment: ${SPRING_PROFILES_ACTIVE:default}
+
 management:
   endpoints:
     web:
@@ -45,6 +52,14 @@ management:
       show-details: when-authorized
       probes:
         enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState,db
+  info:
+    env:
+      enabled: true
   health:
     livenessState:
       enabled: true

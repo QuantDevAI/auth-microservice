@@ -41,8 +41,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // Public endpoints
                 .requestMatchers("/health", "/api/v1/health").permitAll()
-                .requestMatchers("/actuator/health").permitAll()
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
 
                 // Auth endpoints
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()

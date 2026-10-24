@@ -64,65 +64,53 @@ auth-microservice/
 └── README.md
 ```
 
-##  Configuração Local
+## Como subir
 
-### Pré-requisitos
+No Filmaê o **front não chama este serviço**. Ele chama o `back-end` (`:8080`), que faz a fachada para as rotas `/api/v1/auth/*` daqui.
 
-- Java 21 LTS instalado
-- Maven 3.9+ instalado
-- Docker e Docker Compose (para banco de dados)
+### Com a stack do back-end (recomendado no app)
 
-### Inicializar o Ambiente
+No repositório `back-end`:
 
-1. **Clone o repositório**:
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+O auth sobe em **http://localhost:8081** com o mesmo `JWT_SECRET` do back-end (mínimo 64 bytes, HS512). Não use o `docker-compose.yml` deste repo ao mesmo tempo: os dois ocupam a porta 5432.
+
+### Sozinho (só este microsserviço)
+
+Pré-requisitos: Java 21, Maven 3.9+, Docker.
+
 ```bash
 cd auth-microservice
-```
-
-2. **Inicie PostgreSQL com Docker Compose**:
-```bash
-docker-compose up -d postgres
-```
-
-3. **Compile o projeto**:
-```bash
-mvn clean install
-```
-
-4. **Inicie a aplicação**:
-```bash
+docker compose up -d postgres
 mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=dev"
 ```
 
-A aplicação estará disponível em `http://localhost:8080`
+Fica em **http://localhost:8080** (health: `/health` ou `/actuator/health`, Swagger: `/swagger-ui/index.html`).
 
-### Verificar Saúde do Serviço
-
-```bash
-curl http://localhost:8080/health
-```
-
-Resposta esperada:
-```json
-{
-  "status": "UP",
-  "timestamp": "2026-08-30T20:15:00",
-  "service": "auth-service"
-}
-```
-
-##  Executar com Docker Compose
+Compose só deste repo (auth + Postgres, auth na 8080):
 
 ```bash
-# Iniciar todos os serviços
-docker-compose up
-
-# Parar e remover containers
-docker-compose down
-
-# Ver logs
-docker-compose logs -f auth-service
+# JWT_SECRET com >= 64 bytes. O fallback do compose é curto demais para HS512.
+export JWT_SECRET='troque-por-um-segredo-forte-com-pelo-menos-64-bytes-0123456789abcdefghijklmnop'
+docker compose up --build
 ```
+
+```bash
+docker compose down
+docker compose logs -f auth-service
+```
+
+### Conferir
+
+```bash
+curl http://localhost:8080/health          # se rodou sozinho
+curl http://localhost:8081/actuator/health # se veio no compose do back-end
+```
+
 
 ## Banco de Dados
 

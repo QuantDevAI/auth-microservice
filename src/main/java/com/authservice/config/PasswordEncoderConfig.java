@@ -24,9 +24,9 @@ public class PasswordEncoderConfig {
     public static class Argon2PasswordEncoder implements PasswordEncoder {
 
         private final Argon2 argon2 = Argon2Factory.create(
-            Argon2Factory.Argon2Types.ARGON2id,
-            16,  // iterations
-            65536 // memory in KB (64MB)
+                Argon2Factory.Argon2Types.ARGON2id,
+                16,
+                32
         );
 
         @Override

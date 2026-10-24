@@ -57,7 +57,7 @@ class AccountServiceTest {
             .id(UUID.randomUUID())
             .user(user)
             .tokenHash("hash")
-            .expiresAt(Instant.now().plusHours(1))
+                .expiresAt(Instant.now().plusSeconds(3600))
             .build();
         when(tokenHasher.hash("verification-token")).thenReturn("hash");
         when(emailVerificationTokenRepository.findByTokenHash("hash")).thenReturn(Optional.of(token));
@@ -102,7 +102,7 @@ class AccountServiceTest {
         PasswordResetToken token = PasswordResetToken.builder()
             .user(user)
             .tokenHash("hash")
-            .expiresAt(Instant.now().plusHours(1))
+                .expiresAt(Instant.now().plusSeconds(3600))
             .build();
         when(tokenHasher.hash("reset-token")).thenReturn("hash");
         when(passwordResetTokenRepository.findByTokenHash("hash")).thenReturn(Optional.of(token));
@@ -126,7 +126,7 @@ class AccountServiceTest {
         PasswordResetToken token = PasswordResetToken.builder()
             .user(user)
             .tokenHash("hash")
-            .expiresAt(Instant.now().plusHours(1))
+                .expiresAt(Instant.now().plusSeconds(3600))
             .build();
         when(tokenHasher.hash("reset-token")).thenReturn("hash");
         when(passwordResetTokenRepository.findByTokenHash("hash")).thenReturn(Optional.of(token));

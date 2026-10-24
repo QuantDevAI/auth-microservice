@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -45,6 +46,7 @@ public class UserService {
     public UserResponse register(RegisterRequest request) {
         log.debug("Processing user registration for email: {}", request.getEmail());
 
+
         // Normalize and validate email
         String normalizedEmail = normalizeEmail(request.getEmail());
 
@@ -67,15 +69,15 @@ public class UserService {
         Role userRole = roleRepository.findByName("USER")
             .orElseThrow(() -> new RuntimeException("Default USER role not found"));
 
-        // Create user with PENDING_VERIFICATION status
         User user = User.builder()
-            .name(request.getName())
-            .email(normalizedEmail)
-            .passwordHash(passwordHash)
-            .status(User.UserStatus.PENDING_VERIFICATION)
-            .emailVerified(false)
-            .roles(Set.of(userRole))
-            .build();
+                .name(request.getName())
+                .email(normalizedEmail)
+                .passwordHash(passwordHash)
+                .status(User.UserStatus.ACTIVE)
+                .emailVerified(true)
+                .roles(Set.of(userRole))
+                .build();
+
 
         User savedUser = userRepository.save(user);
         accountService.createEmailVerificationToken(savedUser);

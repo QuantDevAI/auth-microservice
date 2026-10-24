@@ -100,10 +100,10 @@ public class JwtProvider {
      */
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token);
+            Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token);
             return true;
         } catch (SecurityException ex) {
             log.debug("Invalid JWT signature: {}", ex.getMessage());
@@ -115,6 +115,8 @@ public class JwtProvider {
             log.debug("Unsupported JWT token: {}", ex.getMessage());
         } catch (IllegalArgumentException ex) {
             log.debug("JWT claims string is empty: {}", ex.getMessage());
+        } catch (JwtException ex) {
+            log.debug("Invalid JWT: {}", ex.getMessage());
         }
         return false;
     }
@@ -135,11 +137,11 @@ public class JwtProvider {
      * Get all claims from token
      */
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parserBuilder()
-            .setSigningKey(getSigningKey())
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     /**
